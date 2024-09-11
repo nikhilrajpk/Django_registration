@@ -56,3 +56,16 @@ def logoutPage(request):
     if request.user.is_authenticated:
         logout(request)
     return redirect(LoginPage)
+
+
+def user_list(request):
+    return render(request,'user_list.html')
+
+def user_create(request):
+    return render(request,'user_form.html')
+
+def user_update(request):
+    return render(request,'user_form.html')
+
+def user_delete(request):
+    return render(request,'user_confirm_delete')
