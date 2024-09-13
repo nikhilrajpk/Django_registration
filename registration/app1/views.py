@@ -71,8 +71,12 @@ def logoutPage(request):
 @login_required
 def adminPage(request):
     if request.user.is_staff:
-        user_obj = User.objects.all().filter(is_staff = False)
-        context = {'user_obj' : user_obj}
+        query = request.GET.get('search_query')
+        if query:
+            user_obj = User.objects.filter(is_staff=False).filter(username__icontains=query) | User.objects.filter(is_staff = False).filter(email__icontains=query)
+        else:
+            user_obj = User.objects.filter(is_staff = False)
+        context = {'user_obj' : user_obj, 'query': query}
         # print(user_obj.values())
         return render(request,'adminPage.html',context)
     else:
