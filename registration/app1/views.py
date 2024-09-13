@@ -84,6 +84,7 @@ def create(request):
         
         return redirect(adminPage)  
 
+@never_cache
 def edit(request):
     if request.user.is_authenticated:
         user_obj = User.objects.all().filter(is_staff = False)
@@ -92,6 +93,7 @@ def edit(request):
     else:
         return redirect(LoginPage)
     
+@never_cache
 def update(request,id):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -104,3 +106,12 @@ def update(request,id):
         )
         user_obj.save()
     return redirect(adminPage)
+
+@never_cache
+def delete(request,id):
+    if request.method == 'POST':    
+        user_obj = User.objects.filter(id = id)
+        user_obj.delete()
+        return redirect(adminPage)
+    else:
+        return redirect(adminPage)

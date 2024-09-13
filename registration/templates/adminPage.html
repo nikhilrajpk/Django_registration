@@ -272,7 +272,7 @@
                         <td>{{ i.email }}</td>
                         <td>
                             <a href="#editEmployeeModal-{{forloop.counter}}" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                            <a href="#deleteEmployeeModal-{{forloop.counter}}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                         </td>
                     </tr>
 					{% endfor %}
@@ -421,16 +421,18 @@
 	</div>
 	{% endfor %}
 	<!-- Delete Modal HTML -->
-	<div id="deleteEmployeeModal" class="modal fade">
+	 {% for i in user_obj %}
+	<div id="deleteEmployeeModal-{{forloop.counter}}" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+				<form action="/delete/{{i.id}}" method="post">
+					{% csrf_token %}
 					<div class="modal-header">						
 						<h4 class="modal-title">Delete Employee</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">					
-						<p>Are you sure you want to delete these Records?</p>
+						<p>Are you sure you want to delete these Records of {{i.username}} ?</p>
 						<p class="text-warning"><small>This action cannot be undone.</small></p>
 					</div>
 					<div class="modal-footer">
@@ -441,6 +443,7 @@
 			</div>
 		</div>
 	</div>
+	{% endfor %}
     <script>
         $(document).ready(function(){
 	// Activate tooltip
