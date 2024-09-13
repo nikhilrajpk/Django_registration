@@ -84,3 +84,10 @@ def create(request):
         
         return redirect(adminPage)  
 
+def edit(request):
+    if request.user.is_authenticated:
+        user_obj = User.objects.all().filter(is_staff = False)
+        context = { 'user_obj' : user_obj }
+        return redirect(request,'adminPage.html',context)
+    else:
+        return redirect(LoginPage)
