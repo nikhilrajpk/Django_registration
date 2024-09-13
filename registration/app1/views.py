@@ -4,13 +4,17 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 # @login_required(login_url='login')
 @never_cache
 def homePage(request):
+    if request.user.is_staff:
+        return redirect(adminPage)
     if request.user.is_authenticated:
-        return render(request,'home.html')
+        user = request.user
+        return render(request,'home.html',{'user':user})
     return redirect(LoginPage)
 
 @never_cache
@@ -42,11 +46,12 @@ def LoginPage(request):
     if request.method == 'POST':
         username = request.POST.get('username')        
         pass1 = request.POST.get('pass')
+        print(username)
         user = authenticate(request,username = username,password = pass1)
         
         if user is not None:
             login(request,user)
-            if user.is_superuser:
+            if user.is_staff:
                 return redirect(adminPage)
             else:
                 return redirect(homePage)
@@ -63,8 +68,9 @@ def logoutPage(request):
     return redirect(LoginPage)
 
 @never_cache
+@login_required
 def adminPage(request):
-    if request.user.is_authenticated:
+    if request.user.is_staff:
         user_obj = User.objects.all().filter(is_staff = False)
         context = {'user_obj' : user_obj}
         # print(user_obj.values())
@@ -115,3 +121,9 @@ def delete(request,id):
         return redirect(adminPage)
     else:
         return redirect(adminPage)
+    
+@never_cache
+def adminLogout(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect(LoginPage)
