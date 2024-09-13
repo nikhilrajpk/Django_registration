@@ -8,4 +8,5 @@ urlpatterns = [
     path('adminPage/',views.adminPage,name='adminPage'),
     path('create/',views.create,name='create'),
     path('edit/',views.edit,name='edit'),
+    path('update/<str:id>',views.update,name='update'),
 ]
