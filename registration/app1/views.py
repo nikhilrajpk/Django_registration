@@ -88,7 +88,7 @@ def create(request):
         email = request.POST.get('email') 
         password = request.POST.get('password')
         
-        user_obj = User.objects.create_user(username, email, password)
+        user_obj = User.objects.create_user(username = username, email = email, password = password)
         print(user_obj)
         user_obj.save()
         
