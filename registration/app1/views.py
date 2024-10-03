@@ -108,12 +108,9 @@ def update(request,id):
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
-        
-        user_obj = User(
-            id = id,
-            username = username,
-            email = email
-        )
+        user_obj = User.objects.get(id = id)
+        user_obj.username = username
+        user_obj.email = email
         user_obj.save()
     return redirect(adminPage)
 
